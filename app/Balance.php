@@ -11,4 +11,9 @@ class Balance extends Model
     protected $fillable = [
         'user_id', 'amount'
     ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

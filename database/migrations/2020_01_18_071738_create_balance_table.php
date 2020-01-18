@@ -15,7 +15,7 @@ class CreateBalanceTable extends Migration
     {
         Schema::create('balance', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->double('amount')->default(0);
             $table->timestamps();
 

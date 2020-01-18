@@ -16,10 +16,10 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->unsignedInteger('sender_id')->nullable();
+            $table->unsignedBigInteger('sender_id')->nullable();
             $table->string('sender_name')->nullable();
 
-            $table->unsignedInteger('receiver_id')->nullable();
+            $table->unsignedBigInteger('receiver_id')->nullable();
             $table->string('receiver_name')->nullable();
 
             $table->double('amount');
