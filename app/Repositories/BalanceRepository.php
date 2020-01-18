@@ -4,9 +4,12 @@ namespace App\Repositories;
 
 
 use App\Balance;
+use App\Exceptions\IncorrectBalanceException;
 use App\Repositories\Contracts\BalanceInterface;
 use App\Repositories\Contracts\TransactionInterface;
 use App\Repositories\Contracts\UserInterface;
+use Dotenv\Exception\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -40,11 +43,11 @@ class BalanceRepository implements BalanceInterface
     public function transfer(int $sender, int $receiver, float $amount): bool
     {
         if ($this->validateTransferInput($sender, $receiver, $amount)) {
-            throw  new \Exception('Wrong input data!');
+            throw  new ValidationException('Wrong input data!');
         }
 
         if ($this->checkSenderBalance($sender, $amount)) {
-            throw  new \Exception('Not enough funds in the account!');
+            throw  new IncorrectBalanceException('Not enough funds in the account!');
         }
 
         try {
@@ -78,7 +81,7 @@ class BalanceRepository implements BalanceInterface
         $balance = $this->findByUser($sender);
 
         if (!$balance) {
-            throw new NotFoundHttpException('Wallet not attached to this user!');
+            throw new ModelNotFoundException('Wallet not attached to this user! ' . $sender);
         }
 
         return $balance->amount <= 0 || $balance->amount < $amount;

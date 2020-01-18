@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\IncorrectBalanceException;
 use App\Http\Requests\Api\TransferRequest;
 use App\Repositories\Contracts\BalanceInterface;
+use Dotenv\Exception\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -27,16 +29,22 @@ class BalanceController extends Controller
     {
         try {
 
+            // @TODO не забыть заменить на Auth::id() после настройки авторизации
             $isTransferred = $this->balance->transfer(
-                1, $request->get('receiver_id'), $request->get('amount')
+                (int)1, (int)$request->get('receiver_id'), (double)$request->get('amount')
             );
 
             return response()->json(['status' => $isTransferred]);
         } catch (\Exception $e) {
 
-            Log::critical('Something went wrong while process transfer. Message: ' . $e->getMessage(), $e->getTrace());
+            if ($e instanceof IncorrectBalanceException || $e instanceof ValidationException) {
+                $message = $e->getMessage();
+            } else {
+                Log::critical('Something went wrong while process transfer. Message: ' . $e->getMessage(), $e->getTrace());
+                $message = 'Something went wrong while process transfer. Please contact with administrators!';
+            }
 
-            return response()->json(['status' => 'error', 'errors' => 'Something went wrong while process transfer. Please contact with administrators!']);
+            return response()->json(['status' => 'error', 'errors' => $message]);
         }
 
 
