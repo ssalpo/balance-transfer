@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 use App\Repositories\Contracts\TransactionInterface;
 use App\Transaction;
+use Illuminate\Database\Eloquent\Collection;
 
 class TransactionRepository implements TransactionInterface
 {
@@ -32,5 +33,34 @@ class TransactionRepository implements TransactionInterface
             'receiver_id' => $receiver,
             'amount' => $amount
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findByUserId(int $userId, array $with = []): Collection
+    {
+        $transaction = Transaction::where('sender_id', $userId)
+            ->orWhere('receiver_id', $userId);
+
+        if ($with) {
+            $transaction->with($with);
+        }
+
+        return $transaction->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findById(int $id, array $with = []): Transaction
+    {
+        $transaction = Transaction::where('id', $id);
+
+        if ($with) {
+            $transaction->with($with);
+        }
+
+        return $transaction->first();
     }
 }

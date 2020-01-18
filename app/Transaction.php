@@ -13,4 +13,14 @@ class Transaction extends Model
         'receiver_id', 'receiver_name',
         'amount'
     ];
+
+    public function sender()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function receiver()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

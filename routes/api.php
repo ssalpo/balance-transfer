@@ -7,4 +7,12 @@ use Illuminate\Http\Request;
 //    return auth()->id();
 //});
 
-Route::middleware('auth:api')->post('transfer', 'BalanceController@transfer');
+
+Route::middleware('auth:api')->group(function () {
+
+    Route::post('/transfer', 'BalanceController@transfer');
+
+    Route::get('/transactions', 'TransactionController@index');
+    Route::get('/transactions/{id}', 'TransactionController@show');
+
+});
