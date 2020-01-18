@@ -133,6 +133,6 @@ class BalanceRepository implements BalanceInterface
             return null;
         }
 
-        return $balance->increment('amount', $amount);
+        return $balance->decrement('amount', $amount);
     }
 }

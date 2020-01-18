@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class UsersTableSeeder extends Seeder
 {
@@ -16,11 +17,13 @@ class UsersTableSeeder extends Seeder
                 'name' => 'Gosha',
                 'email' => 'gosha@gmail.com',
                 'password' => Hash::make('secret'),
+                'api_token' => hash('sha256', Str::random(60))
             ],
             [
                 'name' => 'Nick',
                 'email' => 'nick@gmail.com',
                 'password' => Hash::make('secret'),
+                'api_token' => hash('sha256', Str::random(60))
             ],
         ];
 

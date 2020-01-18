@@ -29,9 +29,8 @@ class BalanceController extends Controller
     {
         try {
 
-            // @TODO не забыть заменить на Auth::id() после настройки авторизации
             $isTransferred = $this->balance->transfer(
-                (int)1, (int)$request->get('receiver_id'), (double)$request->get('amount')
+                (int)auth()->id(), (int)$request->get('receiver_id'), (double)$request->get('amount')
             );
 
             return response()->json(['status' => $isTransferred]);
