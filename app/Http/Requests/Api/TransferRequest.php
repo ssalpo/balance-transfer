@@ -24,9 +24,20 @@ class TransferRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'receiver_id' => 'required',
+        $rules = [
             'amount' => 'required'
         ];
+
+        if (
+            $this->request->has('receiver_id') ||
+            ($this->request->has('email') && $this->request->has('receiver_id')) ||
+            (!$this->request->has('email') && !$this->request->has('receiver_id'))
+        ) {
+            $rules['receiver_id'] = 'required';
+        } else {
+            $rules['email'] = 'required|email';
+        }
+
+        return $rules;
     }
 }

@@ -18,8 +18,9 @@ interface UserInterface
     /**
      * Поиск пользователя по ID
      *
-     * @param int $id
+     * @param mixed $value
+     * @param string $column
      * @return User
      */
-    public function find(int $id): User;
+    public function find($value, string $column = 'id'): User;
 }
