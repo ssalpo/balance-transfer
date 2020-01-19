@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->group(function () {
 
+    Route::get('/balance', 'BalanceController@show');
+
     Route::post('/transfer', 'BalanceController@transfer');
     Route::post('/transfer', 'BalanceController@transfer');
 

@@ -106,9 +106,16 @@ class BalanceRepository implements BalanceInterface
     /**
      * {@inheritDoc}
      */
-    public function findByUser(int $userId): Balance
+    public function findByUser(int $userId, bool $returnBuilder = false): Balance
     {
-        return Balance::where('user_id', $userId)->first();
+
+        $balance = Balance::where('user_id', $userId);
+
+        if ($returnBuilder) {
+            return $balance;
+        }
+
+        return $balance->first();
     }
 
     /**

@@ -67,4 +67,18 @@ class BalanceController extends Controller
     }
 
 
+    /**
+     * Баланс авторизованного пользователя
+     *
+     * @return array
+     */
+    public function show()
+    {
+        $balance = $this->balance->findByUser(auth()->id());
+
+        return [
+            'balance' => $balance->amount,
+        ];
+    }
+
 }
