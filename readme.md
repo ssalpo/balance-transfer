@@ -1,72 +1,68 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# Установка
+	Веб сервер конфигурируется до папки /public в корне приложения
+	Запускаем composer install
+	Копируем .env.example на .env в корне приложения
+	Устанавливаем в файле .env APP_DEBUG=true для тестирования приложения
+	так же настраиваем насстройки подключения к БД
+		DB_HOST=127.0.0.1
+		DB_PORT=3306
+		DB_DATABASE=wallet_transaction
+		DB_USERNAME=user
+		DB_PASSWORD=user_password
+	Запускаем в корне приложения php artisan key:generate
+	Далее php artisan migrate --seed для применения миграций
+	
+# Базовые api для работы
+	POST /api/auth - для авторизациии
+	GET  /api/balance - возращает информации о балансе текущего пользователя
+	POST /api/transfer - перевод условных единиц от одного пользователя к другому
+	GET  /api/transactions - выводит все транзакции текущего пользователя
+	GET  /api/transactions/{id} - выводит информации о конкретной транзакции по ID
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+#Примеры:
 
-## About Laravel
+Для работы по базовым API запросам необдимо сначала авторизироваться и получить токен
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+	curl -XPOST -H "Content-type: application/json" -d '{"email":"gosha@gmail.com","password":"secret"}' 'http://localhost:8080/api/auth'
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+	Параметры: {"email":"gosha@gmail.com","password":"secret"}
+    Ответ: {"name":"Gosha","email":"gosha@gmail.com","api_token":"$2y$10$x8bzzbuATXOzI7PidxkB3.AiB8z.4eVfUOs3G3cisVHI3Q///XrX6"} , берем api_token для отправки остальных запросов.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Перевод платежа другому пользователю:
 
-## Learning Laravel
+	curl -XPOST -H "Content-type: application/json" -d '{"receiver_id":"2","amount":"15"}' 'http://localhost:8080/api/transfer?api_token=$2y$10$x8bzzbuATXOzI7PidxkB3.AiB8z.4eVfUOs3G3cisVHI3Q///XrX6'
+	
+	Принимаемые параметры:
+		по ID пользователя - {"receiver_id":"2","amount":"15"}
+		по email пользователя - {"email":"nick@gmail.com","amount":"15"}
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Запрос на получение баланса:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+	curl -XGET -H "Content-type: application/json" 'http://localhost:8080/api/balance?api_token=$2y$10$x8bzzbuATXOzI7PidxkB3.AiB8z.4eVfUOs3G3cisVHI3Q///XrX6'
 
-## Laravel Sponsors
+Запрос на получение списка всех транзакций пользователя:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+	curl -XGET -H "Content-type: application/json" 'http://localhost:8080/api/transactions?api_token=$2y$10$x8bzzbuATXOzI7PidxkB3.AiB8z.4eVfUOs3G3cisVHI3Q///XrX6'
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
+Запрос на получение информации о конкретной транзакции  пользователя:
+	
+	curl -XGET -H "Content-type: application/json" 'http://localhost:8080/api/transactions/1?api_token=$2y$10$x8bzzbuATXOzI7PidxkB3.AiB8z.4eVfUOs3G3cisVHI3Q///XrX6'
 
-## Contributing
+# Другие API для тестовых целей
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+	POST /api/test/transactions          - возвращает все существующие транзакции
+	GET  /api/test/delete/{userId}/user  - удаляет пользователя из БД
+	POST /api/test/store/user            - добавляет нового пользователя
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Возвращает список всех транзакций приложения:
+	
+	curl -XGET -H "Content-type: application/json" 'http://localhost:8080/api/test/transactions'
 
-## License
+Удаление пользователя из БД
 
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+	curl -XPOST -H "Content-type: application/json" 'http://localhost:8080/api/test/delete/1/user'
+
+Добавление нового пользователя
+
+	curl -XPOST -H "Content-type: application/json" -d '{"name":"Sanjar","email":"ssalpo@site.me", "password":"secret"}' 'http://localhost:8080/api/test/store/user'
