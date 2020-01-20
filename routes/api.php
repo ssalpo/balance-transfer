@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 
+Route::post('/auth', 'UserController@auth');
 
 Route::middleware('auth:api')->group(function () {
 
