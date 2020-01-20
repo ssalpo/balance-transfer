@@ -5,10 +5,21 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
     use Notifiable;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($model) {
+            Transaction::where('sender_id', $model->id)->update(['sender_data' => $model->toJson()]);
+            Transaction::where('receiver_id', $model->id)->update(['receiver_data' => $model->toJson()]);
+        });
+    }
 
     /**
      * The attributes that are mass assignable.

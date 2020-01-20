@@ -17,10 +17,10 @@ class CreateTransactionsTable extends Migration
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('sender_id')->nullable();
-            $table->string('sender_name')->nullable();
+            $table->text('sender_data')->nullable();
 
             $table->unsignedBigInteger('receiver_id')->nullable();
-            $table->string('receiver_name')->nullable();
+            $table->text('receiver_data')->nullable();
 
             $table->double('amount');
             $table->timestamps();

@@ -9,8 +9,8 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     protected $fillable = [
-        'sender_id', 'sender_name',
-        'receiver_id', 'receiver_name',
+        'sender_id', 'sender_data',
+        'receiver_id', 'receiver_data',
         'amount'
     ];
 

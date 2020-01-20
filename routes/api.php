@@ -3,11 +3,6 @@
 use Illuminate\Http\Request;
 
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return auth()->id();
-//});
-
-
 Route::middleware('auth:api')->group(function () {
 
     Route::get('/balance', 'BalanceController@show');
@@ -17,5 +12,14 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/transactions', 'TransactionController@index');
     Route::get('/transactions/{id}', 'TransactionController@show');
+
+});
+
+Route::get('/test/delete/user', function () {
+    $userId = \request('id');
+
+    if ($userId) {
+        App\User::find()->delete();
+    }
 
 });
