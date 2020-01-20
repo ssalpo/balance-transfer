@@ -97,7 +97,7 @@ class BalanceRepository implements BalanceInterface
     protected function validateTransferInput(int $sender, int $receiver, float $amount): bool
     {
         $isSenderExist = $this->userRepository->isExist($sender);
-        $isReceiverExist = $this->userRepository->isExist($sender);
+        $isReceiverExist = $this->userRepository->isExist($receiver);
 
         return !$isSenderExist || !$isReceiverExist || $sender == $receiver || $amount <= 0;
     }

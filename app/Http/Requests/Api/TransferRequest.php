@@ -25,7 +25,7 @@ class TransferRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'amount' => 'required'
+            'amount' => 'required|regex:/^\d+(\.\d{1,3})?$/'
         ];
 
         if (
