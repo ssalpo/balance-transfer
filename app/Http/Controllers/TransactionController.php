@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\Contracts\TransactionInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -37,7 +38,7 @@ class TransactionController extends Controller
      * Возвращает конкретную транзакцию по ID
      *
      * @param $id
-     * @return array
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -45,8 +46,7 @@ class TransactionController extends Controller
 
         $transaction = $this->transaction
             ->findById($id, ['sender', 'receiver'], $returnBuilder)
-            ->where('sender_id', auth()->id())
-            ->orWhere('receiver_id', auth()->id())
+            ->whereRaw('(sender_id=? OR receiver_id=?)', [auth()->id(),auth()->id()])
             ->first();
 
         return response()->json($transaction ?: []);
