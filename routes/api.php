@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 Route::post('/auth', 'UserController@auth');
 
 Route::middleware('auth:api')->group(function () {
@@ -16,11 +14,20 @@ Route::middleware('auth:api')->group(function () {
 
 });
 
-Route::get('/test/delete/user', function () {
-    $userId = \request('id');
 
-    if ($userId) {
-        App\User::find()->delete();
-    }
+// Добавлено для тестовых целей
+if (env('APP_DEBUG', 'false')) {
+    Route::group(['prefix' => 'test'], function () {
+        Route::post('/delete/user', function () {
+            $userId = \request('id');
 
-});
+            if ($userId) {
+                App\User::find()->delete();
+            }
+        });
+
+        Route::get('/transactions', function () {
+            return App\Transaction::all();
+        });
+    });
+}
