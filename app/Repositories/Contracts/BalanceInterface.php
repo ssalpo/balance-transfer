@@ -34,7 +34,7 @@ interface BalanceInterface
      * @param bool $returnBuilder
      * @return Balance
      */
-    public function findByUser(int $userId, bool $returnBuilder = false): Balance;
+    public function findByUser(int $userId, bool $returnBuilder = false): ?Balance;
 
     /**
      * Прибавляет сумму баланса со счета пользователя

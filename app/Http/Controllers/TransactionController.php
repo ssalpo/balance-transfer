@@ -37,10 +37,18 @@ class TransactionController extends Controller
      * Возвращает конкретную транзакцию по ID
      *
      * @param $id
-     * @return \App\Transaction
+     * @return array
      */
     public function show($id)
     {
-        return $this->transaction->findById($id, ['sender', 'receiver']);
+        $returnBuilder = true;
+
+        $transaction = $this->transaction
+            ->findById($id, ['sender', 'receiver'], $returnBuilder)
+            ->where('sender_id', auth()->id())
+            ->orWhere('receiver_id', auth()->id())
+            ->first();
+
+        return response()->json($transaction ?: []);
     }
 }

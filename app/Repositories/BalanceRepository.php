@@ -80,7 +80,7 @@ class BalanceRepository implements BalanceInterface
         $balance = $this->findByUser($sender);
 
         if (!$balance) {
-            throw new ModelNotFoundException('Wallet not attached to this user! ' . $sender);
+            throw new ModelNotFoundException('Wallet not attached to this user! User ID:' . $sender);
         }
 
         return $balance->amount <= 0 || $balance->amount < $amount;
@@ -106,9 +106,8 @@ class BalanceRepository implements BalanceInterface
     /**
      * {@inheritDoc}
      */
-    public function findByUser(int $userId, bool $returnBuilder = false): Balance
+    public function findByUser(int $userId, bool $returnBuilder = false): ?Balance
     {
-
         $balance = Balance::where('user_id', $userId);
 
         if ($returnBuilder) {

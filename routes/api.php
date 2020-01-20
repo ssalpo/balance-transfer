@@ -38,6 +38,8 @@ if (env('APP_DEBUG', 'false')) {
 
                 $user = App\User::create($data);
 
+                $user->balance()->save(['amount' => rand(50, 500)]);
+
                 return $user->makeVisible('api_token');
             }
         });

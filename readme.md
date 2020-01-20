@@ -19,9 +19,9 @@
 	GET  /api/transactions - выводит все транзакции текущего пользователя
 	GET  /api/transactions/{id} - выводит информации о конкретной транзакции по ID
 
-#Примеры:
+###Примеры:
 
-Для работы по базовым API запросам необдимо сначала авторизироваться и получить токен
+Для работы по базовым API запросам необходимо сначала авторизироваться и получить токен
 
 	curl -XPOST -H "Content-type: application/json" -d '{"email":"gosha@gmail.com","password":"secret"}' 'http://localhost:8080/api/auth'
 

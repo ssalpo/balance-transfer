@@ -32,7 +32,8 @@ interface TransactionInterface
      *
      * @param int $id
      * @param array $with
-     * @return Transaction
+     * @param bool $returnBuilder
+     * @return mixed
      */
-    public function findById(int $id, array $with = []): Transaction;
+    public function findById(int $id, array $with = [], bool $returnBuilder = false);
 }

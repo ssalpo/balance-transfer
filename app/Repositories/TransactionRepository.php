@@ -53,12 +53,16 @@ class TransactionRepository implements TransactionInterface
     /**
      * @inheritDoc
      */
-    public function findById(int $id, array $with = []): Transaction
+    public function findById(int $id, array $with = [], bool $returnBuilder = false)
     {
         $transaction = Transaction::where('id', $id);
 
         if ($with) {
             $transaction->with($with);
+        }
+
+        if ($returnBuilder) {
+            return $transaction;
         }
 
         return $transaction->first();
